@@ -1,59 +1,34 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-
-const Card: FC<{}> = () => {
-  return (
-    <div className={styles.card}>
-      <img
-        src="https://picsum.photos/seed/1234/325/112"
-        alt="picsum-image"
-        width={325}
-        height={112}
-      />
-
-      <div className={styles.textWrapper}>
-        <h5>Lorem Ipsum</h5>
-        <h6>Lorem Ipsum</h6>
-
-        <hr />
-
-        <ul>
-          <li>
-            <span className={styles.label}>Author</span>
-            <span className={styles.value}>Chuck Ringer</span>
-          </li>
-          <li>
-            <span className={styles.label}>Author</span>
-            <span className={styles.value}>Chuck Ringer</span>
-          </li>
-          <li>
-            <span className={styles.label}>Author</span>
-            <span className={styles.value}>Chuck Ringer</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-const CardWrapper: FC<{}> = ({ children }) => {
-  return <div className={styles.cardWrapper}>{children}</div>;
-};
+import { Card } from '../components/Card';
+import { CardWrapper } from '../components/CardWrapper';
 
 const Home: NextPage = () => {
+  const [imageValues, setImageValues] = useState([]);
+
+  // fetch images from API
+  useEffect(() => {
+    fetch('https://picsum.photos/v2/list?page=1&limit=5')
+      .then((response) => response.json())
+      .then((data) => {
+        setImageValues(data);
+      });
+  }, []);
+
   return (
     <>
       <Head>
-        <title>Endpoint CLosing</title>
+        <title>Endpoint Closing</title>
         <meta name="description" content="Endpoint Closing" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main className={styles.main}>
         <CardWrapper>
-          {[1, 2, 3, 4, 5].map((item, index) => (
-            <Card key={index} />
+          {imageValues.map((image, index) => (
+            <Card key={index} image={image} />
           ))}
         </CardWrapper>
       </main>
