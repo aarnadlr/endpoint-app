@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
 interface CardProps {
@@ -14,15 +14,23 @@ interface CardProps {
 export const Card: FC<CardProps> = ({
   image: { id, author, download_url },
 }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoaded = () => {
+    setImageLoaded(true);
+  };
+
   return (
     <div className={styles.card}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={download_url}
+        // placeholder.jpg displays until API image loads
+        src={imageLoaded ? download_url : '/placeholder.jpg'}
         alt="picsum-image"
         width={325}
         height={112}
         className={styles.image}
+        onLoad={handleImageLoaded}
       />
 
       <div className={styles.textWrapper}>
